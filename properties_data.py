@@ -14,7 +14,7 @@ ir=1
 base_url='https://www.makaan.com/greater-noida-residential-property/buy-property-in-greater-noida-city?page='
 
 
-for i in range(1, 21):
+for i in range(1, 640):
    url= base_url+str(i)
    # print(url)
    print('Scrapnig on page no. ',{i})
@@ -64,10 +64,10 @@ for i in range(1, 21):
    # print(img_list)
    # print(img_list)
 
-   print('owner',len(owner))
-   print('bhk',len(in_BHK))
-   print('price',len(prices))
-   print('images',len(images))
+   # print('owner',len(owner))
+   # print('bhk',len(in_BHK))
+   # print('price',len(prices))
+   # print('images',len(images))
 
    # for img_save in img_list:
    #    temp= requests.get(img_save)
@@ -81,7 +81,7 @@ for i in range(1, 21):
 # print('images',images)
 # df= pd.DataFrame()
 df = pd.DataFrame({'Owner':owner,'Rooms set':in_BHK, 'Price':prices,'property_image':images }) 
-df.to_csv('Gr_noida_real_estate_properties.csv', index=False, encoding='utf-8')
+df.to_csv('Gr_noida_real_estate_propertie.csv', index=False, encoding='utf-8')
 
 
 
