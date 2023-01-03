@@ -4,20 +4,156 @@ from bs4 import BeautifulSoup
 # from IPython.display import clear
 # import time
 
-name_of_candidates= []
-in_BHK= []
-prices= []
-images= []
-ir=1
+all_link=[]
+candidate_id=[]
+candidate_edu_details=[]
+candidate_name=[]
+candidate_party= []
+candidate_age= []
+so_wo= []
+candidate_edu_details=[]
+assets_liabilitie= []
 
 # Base Url
-base_url='https://myneta.info/Delhi2022/candidate.php?candidate_id='
+base_url='https://myneta.info/Gujarat2022/index.php?action=summary&subAction=candidates_analyzed&sort=candidate#summary'
 
-for id in range(4871,6207):
-   url= base_url+str(id)
-   response= requests.get(url)
-   soup= BeautifulSoup(response.content, 'html.parser')
-   print('Page no- ', url)
+page= requests.get(base_url)
+soup= BeautifulSoup(page.content, 'html.parser')
+link= soup.find_all('table')[2]
+rows= link.find_all('tr')
+
+
+
+
+for row in rows:
+   data= row.find_all('td')
+   # c_link= [i['href']]
+   a= row.find_all('a')    #find anchor tage in html
+   all_link.append(a)
+   for i in a:
+      a_link=i.get('href')    #to get href link
+      id=a_link.split("=")    #split by = to get id
+      # print(id[1])
+      candidate_id.append(id[1])
+      
+del candidate_id[0:7]
+# print(candidate_id)
+
+candidate_details_base_url='https://myneta.info/Gujarat2022/candidate.php?candidate_id='
+for i in candidate_id:
+   url= candidate_details_base_url+str(i)
+   # print(url)
+   page_details= requests.get(url)
+   # print(page_details)     #check response of url
+   soup1= BeautifulSoup(page_details.content, 'html.parser')
+   # print(soup1)
+
+   name= soup1.find('h2', attrs={'class': 'main-title'})
+   for n in name:
+      # print(n.text)
+      c_name=n.text
+      candidate_name.append(n.text)
+      
+   other_details=soup1.find_all('div', attrs={'class': 'grid_2 alpha'})
+   # for d in other_details:
+      # print(d.text)
+   result=[ i.text for i in other_details ]
+   # print(result[0])
+   candidate_party.append(result[0])
+   candidate_age.append(result[2])
+   so_wo.append(result[1])
+
+
+   # Getting Profession details
+   # professions= soup1.select('div div div div div div ')
+   # pro_result= [i.find('p') for i in professions]
+   # print(pro_result)
+
+   # Getting Education details
+   edu_details= soup1.find_all('div', attrs={'class': 'grid_3 alpha omega left-border-div left-blue-border'})
+   e_details= [e.text for e in edu_details]
+   candidate_edu_details.append(edu_details)
+   # print(e_details)
+
+   assets_liabilities=soup1.find_all('div', attrs={'class': 'bottom-border-div red fullWidth' })
+   al_details= [x.text for x in assets_liabilities]
+   print(al_details)
+   assets_liabilitie.append(al_details)
+
+
+   # print('Candidate name :', c_name + 'Candidate Age: ',result[2]+ 'Candidate Party :',result[0]+ 'So/Wo/Do: ',result[1]   )
+# print(candidate_party)
+   print('------------------------------------')
+
+
+
+
+# print(candidate_edu_details)
+
+# df = pd.DataFrame({'Candidate name': candidate_name, 'Candidate Age': candidate_age, 'Candidate Party':  candidate_party, 'So/Wo/Do': so_wo }) 
+# df.to_csv('data.csv', index=False, encoding='utf-8')
+
+
+# result= [id.split('_')[0] for id in all_link]
+# print(all_link)
+
+   # project_href = [i['href'] for i in data.find('a', href=True)]
+   # print(project_href)
+
+# print(all_link)
+# for s in all_link:
+#    spt= s.split('=')
+#    print(spt)
+
+
+
+# print(link.data)
+
+# all= link[:14]
+# print(link.prettify)
+# for anchor in all.find_all:
+#     print(anchor.text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# for id in range(4871,6207):
+#    url= base_url+str(id)
+#    response= requests.get(url)
+#    soup= BeautifulSoup(response.content, 'html.parser')
+#    print('Page no- ', url)
 
    # name=soup.find_all('h2', attrs={'class':'main-title'})
    # # print(name)

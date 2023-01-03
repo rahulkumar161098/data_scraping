@@ -22,7 +22,7 @@ for row in rows:
    cell_text= [cell.get_text(strip=True) for cell in cells]
    # splt_text= [s_text.split("[]") for s_text in cell_text[1:2]]
    # print(cell_text[1:2])
-   print(cell_text[7:])
+   # print(cell_text[7:])
    Candidate_name.append(cell_text[1:2])
    Constituency.append(cell_text[2:3])
    Party.append(cell_text[3:4])
@@ -31,7 +31,7 @@ for row in rows:
    Total_assets.append(cell_text[6:7])
    Liabilities.append(cell_text[7:])
 
-df = pd.DataFrame({'Candidate Name':Candidate_name, 'Constituency':Constituency, 'Party':Party, 'Criminal_case': Criminal_case, 'Education': Education, 'Total_assets': Total_assets, 'Liabilities': Liabilities}) 
+df = pd.DataFrame({'Candidate Name':Candidate_name, 'Constituency':Constituency, 'Party':Party, 'Criminal_case': Criminal_case, 'Education': Education, 'Total_assets': Total_assets, 'Liabilities': Liabilities }) 
 df.to_csv('Delhi_MCD.csv', index=False, encoding='utf-8')
 
 # print(rows)
