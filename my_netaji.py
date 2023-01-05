@@ -13,6 +13,9 @@ candidate_age= []
 so_wo= []
 candidate_edu_details=[]
 assets_liabilitie= []
+candidate_self_professions= []
+candidate_spouse_professions= []
+criminal_case= []
 
 # Base Url
 base_url='https://myneta.info/Gujarat2022/index.php?action=summary&subAction=candidates_analyzed&sort=candidate#summary'
@@ -38,11 +41,13 @@ for row in rows:
       
 del candidate_id[0:7]
 # print(candidate_id)
-
+c_out=0
 candidate_details_base_url='https://myneta.info/Gujarat2022/candidate.php?candidate_id='
 for i in candidate_id:
    url= candidate_details_base_url+str(i)
-   # print(url)
+   print('Candidate url', i)
+   c_out+=1
+   print(c_out)
    page_details= requests.get(url)
    # print(page_details)     #check response of url
    soup1= BeautifulSoup(page_details.content, 'html.parser')
@@ -64,10 +69,6 @@ for i in candidate_id:
    so_wo.append(result[1])
 
 
-   # Getting Profession details
-   # professions= soup1.select('div div div div div div ')
-   # pro_result= [i.find('p') for i in professions]
-   # print(pro_result)
 
    # Getting Education details
    edu_details= soup1.find_all('div', attrs={'class': 'grid_3 alpha omega left-border-div left-blue-border'})
@@ -77,22 +78,55 @@ for i in candidate_id:
 
    assets_liabilities=soup1.find_all('div', attrs={'class': 'bottom-border-div red fullWidth' })
    al_details= [x.text for x in assets_liabilities]
-   print(al_details)
+   # print(al_details)
    assets_liabilitie.append(al_details)
 
+   
+   # Getting Profession details
+   professions= soup1.select('table')[7]
+   p_row= professions.find_all('tr')
+   # p_col= p_row.find_all('td')
+   p_result= [ p.get_text('td') for p in p_row ]
+   candidate_self_professions.append(p_result[1])
+   candidate_spouse_professions.append(p_result[2])
+   # print(p_result[1])
+   # print(p_result[2])
 
-   # print('Candidate name :', c_name + 'Candidate Age: ',result[2]+ 'Candidate Party :',result[0]+ 'So/Wo/Do: ',result[1]   )
-# print(candidate_party)
+   # Number of cases
+   c_case=[]
+   c_cc= []
+   case= soup1.find('div', attrs={'class': 'grid_3 alpha left-border-div left-green-border'})
+   # c_case= case.getText('sapn')
+   # print(case.text)
+   c_case.append(case.text)
+   for cc in c_case:
+      ccc=cc.split(':')
+      criminal_case.append(ccc)
+      # print(ccc)
+   # print(c_case)
+
+   # print('Candidate name :', c_name, 'Candidate Age: ',result[2], 'Candidate Party :',result[0], 'So/Wo/Do: ',result[1], 'Candidate Educations: ', e_details, 'Candidate A&L: ',al_details, 'Candidate Self Professions: ', p_result[1], 'Candidate Spouse Professions: ',p_result[2]  )
+
    print('------------------------------------')
+   # for row['tr'] in professions:
+   #    cell_row= row.find_all('td')
+   #    print(cell_row)
+   # pro_result= [i.find('tr') for i in professions]
+   # print(pro_result)
+
+df = pd.DataFrame({'Candidate name': candidate_name, 'Candidate Age': candidate_age, 'Candidate Party':  candidate_party, 'So/Wo/Do': so_wo, 'Candidate Educations': candidate_edu_details, 'Candidate A&L':assets_liabilitie, 'Candidate Self Professions': candidate_self_professions, 'Candidate Spouse Professions': candidate_spouse_professions, 'Candidate Criminal Cases': criminal_case }) 
+df.to_csv('data.csv', index=False, encoding='utf-8')
 
 
-
-
-# print(candidate_edu_details)
-
-# df = pd.DataFrame({'Candidate name': candidate_name, 'Candidate Age': candidate_age, 'Candidate Party':  candidate_party, 'So/Wo/Do': so_wo }) 
-# df.to_csv('data.csv', index=False, encoding='utf-8')
-
+print(len(candidate_edu_details))
+print(len(candidate_name))
+print(len(candidate_party))
+print(len(candidate_age))
+print(len(so_wo))
+print(len(candidate_edu_details))
+print(len(assets_liabilitie))
+print(len(candidate_self_professions))
+print(len(candidate_spouse_professions))
 
 # result= [id.split('_')[0] for id in all_link]
 # print(all_link)
