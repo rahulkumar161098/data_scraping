@@ -59,13 +59,13 @@ for i in candidate_id:
       c_name=n.text
       candidate_name.append(n.text)
       
-   other_details=soup1.find_all('div', attrs={'class': 'grid_2 alpha'})
+   other_details= soup1.find_all('div', attrs={'class': 'grid_2 alpha'})
    # for d in other_details:
       # print(d.text)
    result=[ i.text for i in other_details ]
    # print(result[0])
    candidate_party.append(result[0])
-   candidate_age.append(result[2])
+   candidate_age.append(result[2])  
    so_wo.append(result[1])
 
 
